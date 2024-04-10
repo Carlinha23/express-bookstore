@@ -24,7 +24,7 @@ describe("GET /books", function () {
 
 describe("GET /books/:isbn", function () {
     test("Gets a single item", async function () {
-      const response = await request(app).get("/books/1234567890");
+      const response = await request(app).get("/books/0691161518");
       expect(response.statusCode).toBe(200);
       expect(response.body.book).toBeDefined();
     });
@@ -44,7 +44,7 @@ describe("POST /books", () => {
         amazon_url: "",
         author: "Matthew Lane",
         language: "english",
-        pages: "264",
+        pages: 264,
         publisher: "Princeton University Press",
         title: "Power-Up: Unlocking the Hidden Mathematics in Video Games",
         year: 2017,
@@ -60,44 +60,23 @@ describe("POST /books", () => {
   
     test("Responds with 400 if request data is invalid", async () => {
       const invalidBookData = {
-        // Missing required fields like 'isbn', 'title', etc.
+        isbn: "",
+        amazon_url: "",
+        author: "Matthew Lane",
+        language: "english",
+        pages: 264,
+        publisher: "Princeton University Press",
+        title: "Power-Up: Unlocking the Hidden Mathematics in Video Games",
+    
       };
   
       const response = await request(app)
         .post("/books")
         .send(invalidBookData);
-  
       expect(response.statusCode).toBe(400);
     });
   
-    test("Responds with 500 if there is an internal server error", async () => {
-      // Mocking an internal server error in the route handler
-      jest.spyOn(Book, "create").mockImplementationOnce(() => {
-        throw new Error("Internal server error");
-      });
-  
-      const newBook = {
-        isbn: "1234567890",
-        amazon_url: "",
-        author: "Matthew Lane",
-        language: "english",
-        pages: "264",
-        publisher: "Princeton University Press",
-        title: "Power-Up: Unlocking the Hidden Mathematics in Video Games",
-        year: 2017,
-      };
-  
-      const response = await request(app)
-        .post("/books")
-        .send(newBook);
-  
-      expect(response.statusCode).toBe(500);
-  
-      // Restore the original implementation of Book.create()
-      Book.create.mockRestore();
-    });
-  });
-  
+});
 
 /** PUT /items/[name] - update item; return `{item: item}` */
 

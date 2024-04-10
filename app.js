@@ -3,10 +3,10 @@
 
 const express = require("express");
 const app = express();
-
+const ExpressError = require("./expressError")
 app.use(express.json());
 
-const ExpressError = require("./expressError")
+
 const bookRoutes = require("./routes/books");
 
 app.use("/books", bookRoutes);
@@ -23,7 +23,7 @@ app.use(function (req, res, next) {
 
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-
+  console.log(response);
   return res.json({
     error: err,
     message: err.message
